@@ -13,7 +13,7 @@ public class MessageExecutor {
     private LinkedBlockingQueue<Runnable> queue; //
     
    /** 
-    * An empty constructor
+    * 
     *  
     */
     private MessageExecutor(){

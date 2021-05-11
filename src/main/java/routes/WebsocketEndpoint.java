@@ -9,13 +9,32 @@ import javax.websocket.OnOpen;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.Session;
 
+import models.Player;
 import models.ServerMessage.AuthenticationRequestMessageBody;
 import models.ServerMessage.AuthenticationResultMessageBody;
 import models.ServerMessage.ConnectionMessageBody;
+import models.ServerMessage.LoginMessageBody;
+import models.ServerMessage.LoginSuccessMessageBody;
+import models.ServerMessage.LogoutMessageBody;
 import models.ServerMessage.Message;
 import models.ServerMessage.MessageExecutor;
 import models.ServerMessage.MessageType;
+import models.ServerMessage.RegistrationResultType;
+import models.ServerMessage.PlayerPropertiesMessageBody;
+import models.ServerMessage.RefreshSuccessMessageBody;
+import models.ServerMessage.RefreshTokenMessageBody;
+import models.ServerMessage.RegisterMessageBody;
+import models.ServerMessage.RegistrationResultMessageBody;
+import models.ServerMessage.RequestPlayerMessageBody;
 import models.ServerMessage.MessageHandlers.AuthenticationRequestHandler;
+import models.ServerMessage.MessageHandlers.AuthenticationResultHandler;
+import models.ServerMessage.MessageHandlers.LoginHandler;
+import models.ServerMessage.MessageHandlers.LogoutHandler;
+import models.ServerMessage.MessageHandlers.PlayerPropertiesHandler;
+import models.ServerMessage.MessageHandlers.RefreshTokenHandler;
+import models.ServerMessage.MessageHandlers.RegisterHandler;
+import models.ServerMessage.MessageHandlers.RegistrationResultHandler;
+import models.ServerMessage.MessageHandlers.RequestPlayerHandler;
 
 @ServerEndpoint(value = "/ws")
 public class WebsocketEndpoint implements Sender {
@@ -39,57 +58,55 @@ public class WebsocketEndpoint implements Sender {
         Gson gson = new Gson();
         Message message = gson.fromJson(messageString, Message.class);
         switch(message.getType()){
-            case AUTHENTICATION_ACKNOWLEDGED:
-                break;
             case AUTHENTICATION_REQUEST:
                 AuthenticationRequestMessageBody authRequestBody = gson.fromJson(message.getBody(), AuthenticationRequestMessageBody.class);
-                // boolean validToken = authRequestBody.getToken() != "";
-                // AuthenticationResultMessageBody authResultResponse = new AuthenticationResultMessageBody(validToken);
-                // try {
-                //     send(new Message(authResultResponse, MessageType.AUTHENTICATION_RESULT));
-                // } catch (IOException e) { e.printStackTrace(); }
+ 
                 handler = new AuthenticationRequestHandler(authRequestBody, this);
                 break;
             case AUTHENTICATION_RESULT:
                 AuthenticationResultMessageBody authResultBody = gson.fromJson(message.getBody(), AuthenticationResultMessageBody.class);
+    
+                handler = new AuthenticationResultHandler(authResultBody.getSuccess());
+                break;
+            case LOGIN:
+                LoginMessageBody loginBody = gson.fromJson(message.getBody(), LoginMessageBody.class);
 
-               // handler = new AuthenticationResultHandler(authResultBody, this);
+                handler = new LoginHandler(loginBody.getUsername(), this);
                 break;
-            case CHAT:
-                //ChatMessageBody chatBody = gson.fromJson(message.getBody(), ChatMessageBody.class);
+            case LOGOUT:
+                LogoutMessageBody logoutBody = gson.fromJson(message.getBody(), LogoutMessageBody.class);
 
-               // handler = new AuthenticationResultHandler(authResultBody, this);
-                break;
-            case CONNECTION:
-                ConnectionMessageBody connectionBody = gson.fromJson(message.getBody(), ConnectionMessageBody.class);
-            
-              //  handler = new AuthenticationResultHandler(authResultBody, this);
-                break;
-            case CREATE_LOBBY:
-                //CreateLobbyMessageBody createLobbyBody = gson.fromJson(message.getBody(), CreateLobbyMessageBody.class);
-                
-              //  handler = new AuthenticationResultHandler(authResultBody, this);
-                break;
-            case LOBBY_LIST:
-                //LobbyListMessageBody lobbyListBody = gson.fromJson(message.getBody(), LobbyListMessageBody.class);
-
-              //  handler = new AuthenticationResultHandler(authResultBody, this);
-                break;
-            case MOVE:
-                //MoveMessageBody moveBody = gson.fromJson(message.getBody(), MoveMessageBody.class);
-
-             //  handler = new AuthenticationResultHandler(authResultBody, this);
+                handler = new LogoutHandler(logoutBody.getPlayerId(), logoutBody.getRefreshToken(), this);
                 break;
             case PLAYER_PROPERTIES:
-                //PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
-      
-               // handler = new AuthenticationResultHandler(authResultBody, this);
+                PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
+
+                handler = new PlayerPropertiesHandler(playerPropertiesBody.getPlayer(), this);
+                break;
+            case REGISTER:
+                RegisterMessageBody registerBody = gson.fromJson(message.getBody(), RegisterMessageBody.class);
+
+                handler = new RegisterHandler(registerBody.getUsername(), this);
+                break;
+            case REGISTRATION_RESULT:
+                RegistrationResultMessageBody registResultBody = gson.fromJson(message.getBody(), RegistrationResultMessageBody.class);
+
+                handler = new RegistrationResultHandler(registResultBody.getResult(), this);
+                break;
+            case REFRESH_TOKEN:
+                RefreshTokenMessageBody refreshTokenBody = gson.fromJson(message.getBody(), RefreshTokenMessageBody.class);
+
+                handler = new RefreshTokenHandler(refreshTokenBody.getPlayerId(), refreshTokenBody.getRefreshToken(), this);
+                break;
+            case REFRESH_RESULT:
+                RefreshSuccessMessageBody refreshSuccessBody = gson.fromJson(message.getBody(), RefreshSuccessMessageBody.class);
+
                 break;
             case REQUEST_PLAYER:
-                //RequestPlayerMessageBody requestPlayerMessageBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
+                RequestPlayerMessageBody requestPlayerBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
 
-               // handler = new AuthenticationResultHandler(authResultBody, this);
-                break;
+                handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
+                break;  
             default:
                 break;
         }
