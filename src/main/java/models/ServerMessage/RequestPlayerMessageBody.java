@@ -1,12 +1,14 @@
 package models.ServerMessage;
 
+import java.util.UUID;
+
 public class RequestPlayerMessageBody {
 
-    private String playerId;
+    private UUID playerId;
 
-    public RequestPlayerMessageBody(String playerId){
+    public RequestPlayerMessageBody(UUID playerId){
         this.playerId = playerId;
     }
 
-    public String getPlayerId(){ return playerId; }
+    public UUID getPlayerId(){ return playerId; }
 }

@@ -10,7 +10,9 @@ public class MessageExecutor {
 
     private ExecutorService executor; //
 
-    private LinkedBlockingQueue<Runnable> queue; //
+    // private FixedThre
+
+    //private LinkedBlockingQueue<Runnable> queue; //
     
    /** 
     * 
@@ -19,7 +21,7 @@ public class MessageExecutor {
     private MessageExecutor(){
         executor = Executors.newFixedThreadPool(20);
 
-        queue = new LinkedBlockingQueue<Runnable>();
+       // queue = new LinkedBlockingQueue<Runnable>();
     }
 
    /** 
@@ -27,19 +29,21 @@ public class MessageExecutor {
     *  
     */
     public void queueMessageHandler(Runnable handler) throws InterruptedException{
-        queue.put(handler);
+       // queue.(handler);
+       executor.submit(handler);
     }
     
    /** 
     * 
     * 
     */
-    public void run() throws InterruptedException{
+    public void run() /*throws InterruptedException*/{
+
         while(true){
-            if(!queue.isEmpty()){
-                executor.execute(queue.take());
-            }
+            
         }
+
+       // System.out.print("made it 2");
     }
 
    /** 

@@ -3,7 +3,6 @@ package models.ServerMessage.MessageHandlers;
 import java.io.IOException;
 
 import interfaces.Sender;
-import jdk.tools.jlink.resources.plugins;
 import models.Player;
 import models.ServerMessage.AuthenticationResultMessageBody;
 import models.ServerMessage.Message;
@@ -31,20 +30,20 @@ public class AuthenticationResultHandler implements Runnable{
     *
     */
     public void run(){
-        try {
-            if(success){
-                Player player = new Player();
-                addPlayer(player);
-                setPassword();
-                setRefreshToken(player.getUuid(), );
+        // try {
+        //     if(success){
+        //         // Player player = new Player();
+        //         // addPlayer(player);
+        //         // setPassword();
+        //         // setRefreshToken(player.getUuid(), );
 
-            }
-            else{
+        //     }
+        //     else{
 
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //     }
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
     }
 }

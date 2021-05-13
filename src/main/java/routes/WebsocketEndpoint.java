@@ -9,31 +9,29 @@ import javax.websocket.OnOpen;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.Session;
 
-import models.Player;
 import models.ServerMessage.AuthenticationRequestMessageBody;
 import models.ServerMessage.AuthenticationResultMessageBody;
-import models.ServerMessage.ConnectionMessageBody;
+import models.ServerMessage.LoginFailMessageBody;
 import models.ServerMessage.LoginMessageBody;
 import models.ServerMessage.LoginSuccessMessageBody;
 import models.ServerMessage.LogoutMessageBody;
 import models.ServerMessage.Message;
 import models.ServerMessage.MessageExecutor;
 import models.ServerMessage.MessageType;
-import models.ServerMessage.RegistrationResultType;
 import models.ServerMessage.PlayerPropertiesMessageBody;
+import models.ServerMessage.RefreshFailMessageBody;
 import models.ServerMessage.RefreshSuccessMessageBody;
 import models.ServerMessage.RefreshTokenMessageBody;
 import models.ServerMessage.RegisterMessageBody;
 import models.ServerMessage.RegistrationResultMessageBody;
+import models.ServerMessage.RegistrationResultType;
 import models.ServerMessage.RequestPlayerMessageBody;
 import models.ServerMessage.MessageHandlers.AuthenticationRequestHandler;
 import models.ServerMessage.MessageHandlers.AuthenticationResultHandler;
 import models.ServerMessage.MessageHandlers.LoginHandler;
 import models.ServerMessage.MessageHandlers.LogoutHandler;
-import models.ServerMessage.MessageHandlers.PlayerPropertiesHandler;
 import models.ServerMessage.MessageHandlers.RefreshTokenHandler;
 import models.ServerMessage.MessageHandlers.RegisterHandler;
-import models.ServerMessage.MessageHandlers.RegistrationResultHandler;
 import models.ServerMessage.MessageHandlers.RequestPlayerHandler;
 
 @ServerEndpoint(value = "/ws")
@@ -71,19 +69,63 @@ public class WebsocketEndpoint implements Sender {
             case LOGIN:
                 LoginMessageBody loginBody = gson.fromJson(message.getBody(), LoginMessageBody.class);
 
-                handler = new LoginHandler(loginBody.getUsername(), this);
+                handler = new LoginHandler(loginBody.getUsername(), loginBody.getPassword(), this);
+                break;
+            case LOGIN_FAIL:
+                LoginFailMessageBody loginFailBody = gson.fromJson(message.getBody(), LoginFailMessageBody.class);
+           
+                try {
+                    send(new Message(loginFailBody, MessageType.LOGIN_FAIL));
+                } catch (IOException e) {
+                    System.out.println("LOGIN FAIL");
+                    e.printStackTrace();
+                }
+              
+                break;
+            case LOGIN_SUCCESS:
+                LoginSuccessMessageBody loginSuccessBody = gson.fromJson(message.getBody(), LoginSuccessMessageBody.class);
+           
+                try {
+                    send(new Message(loginSuccessBody, MessageType.LOGIN_SUCCESS));
+                } catch (IOException e) {
+                    System.out.println("LOGIN SUCCESS");
+                    e.printStackTrace();
+                }
                 break;
             case LOGOUT:
                 LogoutMessageBody logoutBody = gson.fromJson(message.getBody(), LogoutMessageBody.class);
-
+           
                 handler = new LogoutHandler(logoutBody.getPlayerId(), logoutBody.getRefreshToken(), this);
+                break;
+            case LOGOUT_FAIL:
+                try {
+                    send(new Message(null, MessageType.LOGIN_FAIL));
+                } catch (IOException e) {
+                    System.out.println("LOGOUT_FAIL");
+                    e.printStackTrace();
+                }
+                break;
+            case LOGOUT_SUCCESS:
+                try {
+                    send(new Message(null, MessageType.LOGIN_SUCCESS));
+                } catch (IOException e) {
+                    System.out.println("LOGOUT_SUCCESS");
+                    e.printStackTrace();
+                }
+              
                 break;
             case PLAYER_PROPERTIES:
                 PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
 
-                handler = new PlayerPropertiesHandler(playerPropertiesBody.getPlayer(), this);
+                try {
+                    send(new Message(playerPropertiesBody, MessageType.PLAYER_PROPERTIES));
+                } catch (IOException e) {
+                    System.out.println("PLAYER PROPERTIES");
+                    e.printStackTrace();
+                }
                 break;
             case REGISTER:
+            System.out.println("made it");
                 RegisterMessageBody registerBody = gson.fromJson(message.getBody(), RegisterMessageBody.class);
 
                 handler = new RegisterHandler(registerBody.getUsername(), this);
@@ -91,16 +133,54 @@ public class WebsocketEndpoint implements Sender {
             case REGISTRATION_RESULT:
                 RegistrationResultMessageBody registResultBody = gson.fromJson(message.getBody(), RegistrationResultMessageBody.class);
 
-                handler = new RegistrationResultHandler(registResultBody.getResult(), this);
+                // try {
+                    
+
+                //    send(new Message(registResultBody.getResult(), MessageType.REGISTRATION_RESULT));
+                // } catch (IOException e) {
+                //     System.out.println("REGISTRATION RESULT");
+                //     e.printStackTrace();
+                // }
+                if(registResultBody.getResult() == RegistrationResultType.SUCCESS){
+                    System.out.print("SUCCESS");
+                }
+                else if (registResultBody.getResult() == RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS){
+                    System.out.print("PASSWORD_FAILS_REQUIREMENTS");
+                }
+                else if (registResultBody.getResult() == RegistrationResultType.USERNAME_ALREADY_EXISTS){
+                    System.out.print("USERNAME_ALREADY_EXISTS");
+                }
+                else{
+                    System.out.print("UNKNOWN_ERROR");
+                }
+                break;
+            case REFRESH_FAIL:
+               RefreshFailMessageBody refreshFailBody = gson.fromJson(message.getBody(), RefreshFailMessageBody.class);
+
+                try {
+                 send(new Message(refreshFailBody.getJWT(), MessageType.REFRESH_FAIL));
+                } 
+                catch (IOException e) {
+                    System.out.println("REFRESH FAIL");
+                    e.printStackTrace();
+                }
+
+                break;
+            case REFRESH_SUCCESS:
+                RefreshSuccessMessageBody refreshSuccessBody = gson.fromJson(message.getBody(), RefreshSuccessMessageBody.class);
+
+                try {
+                    send(new Message(refreshSuccessBody.getJWT(), MessageType.REFRESH_SUCCESS));
+                } catch (IOException e) {
+                    System.out.println("REFRESH SUCCESS");
+                    e.printStackTrace();
+                }
+
                 break;
             case REFRESH_TOKEN:
                 RefreshTokenMessageBody refreshTokenBody = gson.fromJson(message.getBody(), RefreshTokenMessageBody.class);
 
                 handler = new RefreshTokenHandler(refreshTokenBody.getPlayerId(), refreshTokenBody.getRefreshToken(), this);
-                break;
-            case REFRESH_RESULT:
-                RefreshSuccessMessageBody refreshSuccessBody = gson.fromJson(message.getBody(), RefreshSuccessMessageBody.class);
-
                 break;
             case REQUEST_PLAYER:
                 RequestPlayerMessageBody requestPlayerBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
@@ -110,8 +190,10 @@ public class WebsocketEndpoint implements Sender {
             default:
                 break;
         }
-
-        MessageExecutor.getInstance().queueMessageHandler(handler);
+        System.out.println("made it thread");
+        Thread t1 = new Thread(handler);
+        t1.start();
+      // MessageExecutor.getInstance().queueMessageHandler(handler);
     }
 
     public void send(Message message) throws IOException{
