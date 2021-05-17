@@ -16,12 +16,14 @@ import services.JWTService;
 public class RegisterHandler implements Runnable {
     
     private Sender sender;
+    private UUID playerId;
     private String userName;
     private String password;
 
 
-    public RegisterHandler(String userName, String password, Sender sender){
+    public RegisterHandler(String userName, UUID playerId, String password, Sender sender){
         this.userName = userName;
+        this.playerId = playerId;
         this.password = password;
         this.sender = sender;
     }
@@ -34,7 +36,7 @@ public class RegisterHandler implements Runnable {
             if(PlayerDatabaseInterface.userNameIsUnique(userName)){
                 System.out.println("Name is Unique");
 
-                if(PlayerDatabaseInterface.setPassword(userName, password)){
+                if(PlayerDatabaseInterface.setPassword(playerId, password)){
                     System.out.println("Password Set");
                     
                     Player player = new Player();
@@ -44,7 +46,7 @@ public class RegisterHandler implements Runnable {
                     String jwt = JWTService.create();
                     UUID refreshToken = UUID.randomUUID(); //change this maybe
 
-                    PlayerDatabaseInterface.setRefreshToken(userName, refreshToken.toString());
+                    PlayerDatabaseInterface.setRefreshToken(playerId, refreshToken.toString());
 
                     RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS);
                     sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 

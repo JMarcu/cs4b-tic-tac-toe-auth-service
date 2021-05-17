@@ -11,12 +11,10 @@ import models.ServerMessage.MessageType;
 public class RequestPlayerHandler implements Runnable{
 
     private UUID playerId;
-    private String userName;
     private Sender sender;
 
-    public RequestPlayerHandler(UUID playerId ,String userName, Sender sender){
+    public RequestPlayerHandler(UUID playerId, Sender sender){
         this.playerId = playerId;
-        this.userName = userName;
         this.sender = sender;
     }
 

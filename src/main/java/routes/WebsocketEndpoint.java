@@ -84,7 +84,7 @@ public class WebsocketEndpoint implements Sender {
             case LOGOUT:
                 LogoutMessageBody logoutBody = gson.fromJson(message.getBody(), LogoutMessageBody.class);
            
-                handler = new LogoutHandler(logoutBody.getUsername(), logoutBody.getRefreshToken(), this);
+                handler = new LogoutHandler(logoutBody.getPlayerId(), logoutBody.getRefreshToken(), this);
                 break;
             case LOGOUT_FAIL:
                 try {
@@ -170,12 +170,12 @@ public class WebsocketEndpoint implements Sender {
             case REFRESH_TOKEN:
                 RefreshTokenMessageBody refreshTokenBody = gson.fromJson(message.getBody(), RefreshTokenMessageBody.class);
 
-                handler = new RefreshTokenHandler(refreshTokenBody.getUsername(), refreshTokenBody.getRefreshToken(), this);
+                handler = new RefreshTokenHandler(refreshTokenBody.getPlayerId(), refreshTokenBody.getRefreshToken(), this);
                 break;
             case REQUEST_PLAYER:
                 RequestPlayerMessageBody requestPlayerBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
 
-                handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), requestPlayerBody.getUsername(), this);
+                handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
                 break;  
             default:
                 break;

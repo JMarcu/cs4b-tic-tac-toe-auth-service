@@ -46,7 +46,7 @@ public class LoginHandler implements Runnable{
         }
         else{
             // try {
-            //     sender.send(new Message(false, MessageType.LOGIN_FAIL));
+            //     sender.send(new Message(null, MessageType.LOGIN_FAIL));
             // } catch (IOException e) {
             //     e.printStackTrace();
             // }
