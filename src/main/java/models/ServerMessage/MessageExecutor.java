@@ -16,8 +16,9 @@ public class MessageExecutor extends Thread{
     }
 
     public void queueMessageHandler(Runnable handler) throws InterruptedException{
-        System.out.println("Queing Handler");
+        System.out.println("Queueing Handler");
         queue.put(handler);
+        System.out.println("Queue Is Empty: " + queue.isEmpty());
     }
     
     public void run() {
@@ -25,9 +26,11 @@ public class MessageExecutor extends Thread{
 
         while(true){
             if(!queue.isEmpty()){
+                System.out.println("Queue Is Not Empty");
                 try {
                     executor.execute(queue.take());
                 } catch (Exception e) {
+                    System.out.println("Error executing handler :: " + e);
                     e.printStackTrace();
                 }
             }
