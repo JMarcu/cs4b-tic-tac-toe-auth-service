@@ -218,6 +218,41 @@ public class PlayerDatabaseInterface {
         return player;
     }
 
+    public Player getPlayer(String username){
+        Player player;
+        MarkerShape shape = MarkerShape.CAT;
+        Color color = Color.BLACK;
+        String username = "";
+
+
+        try{
+            Connection conn = getConn();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Players WHERE username = ?");
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();   
+            while (rs.next())
+            {
+                String id = rs.getString(1);
+                shape = MarkerShape.valueOf(rs.getString(2));
+                color = Color.valueOf(rs.getString(3));
+                username = rs.getString(4);
+            }
+            //close everything
+            rs.close();
+            stmt.close();
+            conn.close();
+    
+            }
+            catch(Exception ex)
+            {
+                System.out.print("Error in PlayerDatabaseInterface");
+            }
+
+        player = new Player(color, playerId, username, shape); // CHANGE
+        //TODO
+        return player;
+    }
+
     public void setPlayer(Player player){
         //TODO
         try{
