@@ -39,10 +39,7 @@ public class LoginHandler implements Runnable{
             PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
             LoginSuccessMessageBody body = new LoginSuccessMessageBody(jwt, refreshToken.toString(), player);
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            Gson gson = gsonBuilder.create();
-            gson.excluder().excludeFieldsWithoutExposeAnnotation();
-            
+            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
             Message msg = new Message(gson.toJson(body), MessageType.LOGIN_SUCCESS);
             try {
                 sender.send(msg);
