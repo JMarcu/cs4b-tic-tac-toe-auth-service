@@ -30,8 +30,10 @@ public class LoginHandler implements Runnable{
         if(isPasswordValid){
             String jwt = JWTService.create();
             UUID refreshToken = UUID.randomUUID();
+
+            Player player = PlayerDatabaseInterface.getInstance().getPlayer(userName);
            
-            PlayerDatabaseInterface.getInstance().setRefreshToken(userName, refreshToken.toString());
+            PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
             LoginSuccessMessageBody body = new LoginSuccessMessageBody(jwt, refreshToken.toString());
             Message msg = new Message(body, MessageType.LOGIN_SUCCESS);

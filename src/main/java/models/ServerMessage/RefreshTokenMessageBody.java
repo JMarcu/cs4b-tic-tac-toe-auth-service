@@ -1,15 +1,17 @@
 
 package models.ServerMessage;
 
+import java.util.UUID;
+
 public class RefreshTokenMessageBody {
     private String refreshToken;
-    private String userName;
+    private UUID playerId;
 
-    public RefreshTokenMessageBody(String refreshToken, String userName){
+    public RefreshTokenMessageBody(String refreshToken, UUID playerId){
         this.refreshToken = refreshToken;
-        this.userName = userName;
+        this.playerId = playerId;
     }
 
     public String getRefreshToken(){ return refreshToken; }
-    public String getUsername(){return userName;}
+    public UUID getPlayerId(){return playerId;}
 }

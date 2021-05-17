@@ -1,14 +1,16 @@
 package models.ServerMessage;
 
+import java.util.UUID;
+
 public class RegisterMessageBody {
     private String password;
-    private String username;
+    private String userName;
 
-    public RegisterMessageBody(String username, String password){
-        this.username = username;
+    public RegisterMessageBody(String password, UUID playerId, String userName){
         this.password = password;
+        this.userName = userName;
     }
 
     public String getPassword(){ return password; }
-    public String getUsername(){ return username; }
+    public String getUserName() { return userName;}
 }
