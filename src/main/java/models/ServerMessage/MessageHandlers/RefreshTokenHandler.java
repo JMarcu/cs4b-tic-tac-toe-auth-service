@@ -3,8 +3,8 @@ package models.ServerMessage.MessageHandlers;
 import java.io.IOException;
 import java.util.UUID;
 
+import interfaces.PlayerDatabaseInterface;
 import interfaces.Sender;
-import models.PlayerDatabaseInterface;
 import models.ServerMessage.Message;
 import models.ServerMessage.MessageType;
 import services.JWTService;
@@ -24,7 +24,7 @@ public class RefreshTokenHandler implements Runnable{
     @Override
     public void run() {
         
-        String reFreshToken = PlayerDatabaseInterface.getRefreshToken(userName);
+        String reFreshToken = PlayerDatabaseInterface.getInstance().getRefreshToken(userName);
         
         reFreshToken =jwt;
 

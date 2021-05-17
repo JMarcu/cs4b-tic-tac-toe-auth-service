@@ -239,4 +239,8 @@ public class PlayerDatabaseInterface {
                 System.out.print("Error in PlayerDatabaseInterface");
             }
     }
+
+    public boolean userNameIsUnique(String username){
+        return true;
+    }
 }
