@@ -2,12 +2,14 @@ package models.ServerMessage.MessageHandlers;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.UUID;
 
 import interfaces.Sender;
 import models.Player;
 import models.PlayerDatabaseInterface;
 import models.ServerMessage.Message;
 import models.ServerMessage.MessageType;
+import models.ServerMessage.RegistrationResultMessageBody;
 import models.ServerMessage.RegistrationResultType;
 import services.JWTService;
 
@@ -40,10 +42,12 @@ public class RegisterHandler implements Runnable {
                     PlayerDatabaseInterface.setplayer(player);
 
                     String jwt = JWTService.create();
-                    String refreshToken = JWTService.create(); //change this maybe
+                    UUID refreshToken = UUID.randomUUID(); //change this maybe
 
-                    PlayerDatabaseInterface.setRefreshToken(userName, refreshToken);
-                    sender.send(new Message(RegistrationResultType.SUCCESS, MessageType.REGISTRATION_RESULT)); 
+                    PlayerDatabaseInterface.setRefreshToken(userName, refreshToken.toString());
+
+                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS);
+                    sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 
                 } else{
                     sender.send(new Message(RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS, MessageType.REGISTRATION_RESULT)); 
                 }
