@@ -22,27 +22,21 @@ public class LogoutHandler implements Runnable{
 
     @Override
     public void run() {
-        String refreshToken = PlayerDatabaseInterface.getInstance().getRefreshToken(userName);
+        String tokenFromDB = PlayerDatabaseInterface.getInstance().getRefreshToken(userName);
         
-        if(JWTService.validate(token)){
+        if(tokenFromDB.equals(token)){
             PlayerDatabaseInterface.getInstance().deleteRefreshToken(userName);
-            // try {
-            //     sender.send(new Message(null, MessageType.LOGOUT_SUCCESS));
-            // } catch (IOException e) {
-            //     // TODO Auto-generated catch block
-            //     e.printStackTrace();
-            // }
-
-            System.out.println("It worked true");
-        }
-        else{
-            // try {
-            //     sender.send(new Message(null, MessageType.LOGOUT_FAIL));
-            // } catch (IOException e) {
-            //     e.printStackTrace();
-            // }
-
-            System.out.println("It worked false");
+            try {
+                sender.send(new Message(null, MessageType.LOGOUT_SUCCESS));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else{
+            try {
+                sender.send(new Message(null, MessageType.LOGOUT_FAIL));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
