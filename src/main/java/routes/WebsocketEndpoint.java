@@ -180,11 +180,8 @@ public class WebsocketEndpoint implements Sender {
             default:
                 break;
         }
-         System.out.println("made it thread");
-        // Thread t1 = new Thread(handler);
-        // t1.start();
-      MessageExecutor.getInstance().queueMessageHandler(handler);
-      MessageExecutor.getInstance().start();
+        System.out.println("made it thread");
+        MessageExecutor.getInstance().queueMessageHandler(handler);
     }
 
     public void send(Message message) throws IOException{

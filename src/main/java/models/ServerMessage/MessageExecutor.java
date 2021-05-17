@@ -31,9 +31,6 @@ public class MessageExecutor extends Thread{
                     e.printStackTrace();
                 }
             }
-            else{
-                System.out.println("Inside of Executor end");
-            }
        }
     }
 
