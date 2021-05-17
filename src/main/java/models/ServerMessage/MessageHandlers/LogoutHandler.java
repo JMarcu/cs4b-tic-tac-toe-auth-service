@@ -24,6 +24,9 @@ public class LogoutHandler implements Runnable{
     @Override
     public void run() {
         String tokenFromDB = PlayerDatabaseInterface.getInstance().getRefreshToken(playerId);
+
+        System.out.println("token: " + token);
+        System.out.println("tokenFromDB: " + tokenFromDB);
         
         if(tokenFromDB.equals(token)){
             PlayerDatabaseInterface.getInstance().deleteRefreshToken(playerId);
