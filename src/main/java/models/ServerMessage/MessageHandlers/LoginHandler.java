@@ -43,7 +43,7 @@ public class LoginHandler implements Runnable{
             Gson gson = gsonBuilder.create();
             gson.excluder().excludeFieldsWithoutExposeAnnotation();
             
-            Message msg = new Message(gson.toJson(body);, MessageType.LOGIN_SUCCESS);
+            Message msg = new Message(gson.toJson(body), MessageType.LOGIN_SUCCESS);
             try {
                 sender.send(msg);
             } catch (IOException e) {
