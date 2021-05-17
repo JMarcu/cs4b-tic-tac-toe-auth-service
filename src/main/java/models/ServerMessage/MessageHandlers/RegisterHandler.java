@@ -19,7 +19,6 @@ public class RegisterHandler implements Runnable {
     private String userName;
     private String password;
 
-
     public RegisterHandler(String userName, String password, Sender sender){
         this.userName = userName;
         this.password = password;
