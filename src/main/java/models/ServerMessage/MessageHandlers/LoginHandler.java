@@ -3,6 +3,9 @@ package models.ServerMessage.MessageHandlers;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import interfaces.PlayerDatabaseInterface;
 import interfaces.Sender;
 import models.Player;
@@ -36,7 +39,11 @@ public class LoginHandler implements Runnable{
             PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
             LoginSuccessMessageBody body = new LoginSuccessMessageBody(jwt, refreshToken.toString(), player);
-            Message msg = new Message(body, MessageType.LOGIN_SUCCESS);
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.create();
+            gson.excluder().excludeFieldsWithoutExposeAnnotation();
+            
+            Message msg = new Message(gson.toJson(body);, MessageType.LOGIN_SUCCESS);
             try {
                 sender.send(msg);
             } catch (IOException e) {

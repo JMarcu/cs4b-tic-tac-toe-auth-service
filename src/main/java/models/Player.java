@@ -56,15 +56,19 @@ public class Player implements Serializable {
      ************************************************************************************************************/
 
     /** Whether or not the player is an AI. */
+    @Expose
     protected boolean isAi;
 
     /** The color of the player's marker. */
+    @Expose
     private SerializeableColor color;
 
     /** A uuid for identifying the player. */
+    @Expose
     private UUID id;
 
     /** The player's name. */
+    @Expose
     private String name;
 
     /** A {@link java.util.concurrent.Flow.Publisher} implementation that handles our subscriptions. */
@@ -72,6 +76,7 @@ public class Player implements Serializable {
     private SubmissionPublisher<Player.Patch> publisher;
 
     /** The shape of the player's marker. */
+    @Expose
     private MarkerShape shape;
 
     /** Constructs a default player object. */
