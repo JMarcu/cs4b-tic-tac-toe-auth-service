@@ -25,31 +25,27 @@ public class LoginHandler implements Runnable{
 
     @Override
     public void run() {
-
         boolean isPasswordValid = PlayerDatabaseInterface.getInstance().validatePassword(userName, password);
 
         if(isPasswordValid){
-           Player player = PlayerDatabaseInterface.getInstance().getPlayer(UUID.randomUUID());
-
-           String jwt = JWTService.create();
-           String refreshToken = JWTService.create();
+            String jwt = JWTService.create();
+            String refreshToken = JWTService.create();
            
-           //player.getUuid()
-          PlayerDatabaseInterface.getInstance().setRefreshToken(userName, refreshToken);
+            PlayerDatabaseInterface.getInstance().setRefreshToken(userName, refreshToken);
 
-        //    try {
-        //        sender.send(new Message(new LoginSuccessMessageBody(jwt, refreshToken), MessageType.LOGIN_SUCCESS));
-        //     } 
-        //     catch (IOException e) {
-        //         e.printStackTrace();
-        //     }
-        }
-        else{
-            // try {
-            //     sender.send(new Message(false, MessageType.LOGIN_FAIL));
-            // } catch (IOException e) {
-            //     e.printStackTrace();
-            // }
+            LoginSuccessMessageBody body = new LoginSuccessMessageBody(jwt, refreshToken);
+            Message msg = new Message(body, MessageType.LOGOUT_SUCCESS);
+            try {
+                sender.send(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else{
+            try {
+                sender.send(new Message(null, MessageType.LOGIN_FAIL));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }        
     }
 }

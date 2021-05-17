@@ -120,17 +120,6 @@ public class WebsocketEndpoint implements Sender {
                 break;
             case REGISTRATION_RESULT:
                 RegistrationResultMessageBody registResultBody = gson.fromJson(message.getBody(), RegistrationResultMessageBody.class);
-
-                
-
-                // try {
-                    
-
-                //    send(new Message(registResultBody.getResult(), MessageType.REGISTRATION_RESULT));
-                // } catch (IOException e) {
-                //     System.out.println("REGISTRATION RESULT");
-                //     e.printStackTrace();
-                // }
                 if(registResultBody.getResult() == RegistrationResultType.SUCCESS){
                     System.out.print("SUCCESS");
                 }
@@ -180,7 +169,6 @@ public class WebsocketEndpoint implements Sender {
             default:
                 break;
         }
-        System.out.println("made it thread");
         MessageExecutor.getInstance().queueMessageHandler(handler);
     }
 
