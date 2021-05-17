@@ -11,12 +11,12 @@ import services.JWTService;
 
 public class RefreshTokenHandler implements Runnable{
     
-    private UUID playerId;
+    private String userName;
     private String jwt;
     private Sender sender;
         
-    public RefreshTokenHandler(UUID playerId, String jwt, Sender sender){
-        this.playerId = playerId;
+    public RefreshTokenHandler(String userName, String jwt, Sender sender){
+        this.userName = userName;
         this.jwt = jwt;
         this.sender = sender;
     }
@@ -24,7 +24,7 @@ public class RefreshTokenHandler implements Runnable{
     @Override
     public void run() {
         
-        String reFreshToken = PlayerDatabaseInterface.getRefreshToken(playerId);
+        String reFreshToken = PlayerDatabaseInterface.getRefreshToken(userName);
         
         reFreshToken =jwt;
 

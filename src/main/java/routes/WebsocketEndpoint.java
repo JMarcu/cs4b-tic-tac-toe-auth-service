@@ -56,16 +56,6 @@ public class WebsocketEndpoint implements Sender {
         Gson gson = new Gson();
         Message message = gson.fromJson(messageString, Message.class);
         switch(message.getType()){
-            case AUTHENTICATION_REQUEST:
-                AuthenticationRequestMessageBody authRequestBody = gson.fromJson(message.getBody(), AuthenticationRequestMessageBody.class);
- 
-                handler = new AuthenticationRequestHandler(authRequestBody, this);
-                break;
-            case AUTHENTICATION_RESULT:
-                AuthenticationResultMessageBody authResultBody = gson.fromJson(message.getBody(), AuthenticationResultMessageBody.class);
-    
-                handler = new AuthenticationResultHandler(authResultBody.getSuccess());
-                break;
             case LOGIN:
                 LoginMessageBody loginBody = gson.fromJson(message.getBody(), LoginMessageBody.class);
 
@@ -95,7 +85,7 @@ public class WebsocketEndpoint implements Sender {
             case LOGOUT:
                 LogoutMessageBody logoutBody = gson.fromJson(message.getBody(), LogoutMessageBody.class);
            
-                handler = new LogoutHandler(logoutBody.getPlayerId(), logoutBody.getRefreshToken(), this);
+                handler = new LogoutHandler(logoutBody.getUsername(), logoutBody.getRefreshToken(), this);
                 break;
             case LOGOUT_FAIL:
                 try {
@@ -125,13 +115,14 @@ public class WebsocketEndpoint implements Sender {
                 }
                 break;
             case REGISTER:
-            System.out.println("made it");
                 RegisterMessageBody registerBody = gson.fromJson(message.getBody(), RegisterMessageBody.class);
 
-                handler = new RegisterHandler(registerBody.getUsername(), this);
+                handler = new RegisterHandler(registerBody.getUsername(), registerBody.getPassword(), this);
                 break;
             case REGISTRATION_RESULT:
                 RegistrationResultMessageBody registResultBody = gson.fromJson(message.getBody(), RegistrationResultMessageBody.class);
+
+                
 
                 // try {
                     
@@ -180,20 +171,21 @@ public class WebsocketEndpoint implements Sender {
             case REFRESH_TOKEN:
                 RefreshTokenMessageBody refreshTokenBody = gson.fromJson(message.getBody(), RefreshTokenMessageBody.class);
 
-                handler = new RefreshTokenHandler(refreshTokenBody.getPlayerId(), refreshTokenBody.getRefreshToken(), this);
+                handler = new RefreshTokenHandler(refreshTokenBody.getUsername(), refreshTokenBody.getRefreshToken(), this);
                 break;
             case REQUEST_PLAYER:
                 RequestPlayerMessageBody requestPlayerBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
 
-                handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
+                handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), requestPlayerBody.getUsername(), this);
                 break;  
             default:
                 break;
         }
-        System.out.println("made it thread");
-        Thread t1 = new Thread(handler);
-        t1.start();
-      // MessageExecutor.getInstance().queueMessageHandler(handler);
+         System.out.println("made it thread");
+        // Thread t1 = new Thread(handler);
+        // t1.start();
+      MessageExecutor.getInstance().queueMessageHandler(handler);
+      MessageExecutor.getInstance().start();
     }
 
     public void send(Message message) throws IOException{

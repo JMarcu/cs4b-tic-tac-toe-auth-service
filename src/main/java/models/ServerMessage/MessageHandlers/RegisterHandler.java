@@ -15,10 +15,12 @@ public class RegisterHandler implements Runnable {
     
     private Sender sender;
     private String userName;
+    private String password;
 
 
-    public RegisterHandler(String userName, Sender sender){
+    public RegisterHandler(String userName, String password, Sender sender){
         this.userName = userName;
+        this.password = password;
         this.sender = sender;
     }
 
@@ -28,19 +30,16 @@ public class RegisterHandler implements Runnable {
             
             if(PlayerDatabaseInterface.userNameIsUnique(userName)){
                 // System.out.println("made it");
-               // Scanner input = new Scanner(System.in);
-                Player player = new Player();
-                System.out.println("Enter a password: ");
-                String password = "password"; /*input.nextLine();*/
 
                 if(PlayerDatabaseInterface.setPassword(userName, password)){
+                    Player player = new Player();
+                    player.setName(userName);
                     PlayerDatabaseInterface.setplayer(player);
 
                     String jwt = JWTService.create();
                     String refreshToken = JWTService.create(); //change this maybe
 
-                    PlayerDatabaseInterface.setRefreshToken(player.getUuid(), refreshToken);
-                    //input.close();
+                    PlayerDatabaseInterface.setRefreshToken(userName, refreshToken);
                     //sender.send(new Message(RegistrationResultType.SUCCESS, MessageType.REGISTRATION_RESULT)); 
                 }
                 else{

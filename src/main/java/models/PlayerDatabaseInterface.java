@@ -4,16 +4,19 @@ import java.util.UUID;
 
 public class PlayerDatabaseInterface {
 
-    public static void setRefreshToken(UUID uuid, String refreshToken) {
+    //change
+    public static void setRefreshToken(String userName, String refreshToken) {
         System.out.println("setRefreshToken");
     }
 
-    public static String getRefreshToken(UUID playerId) {
+    //Change
+    public static String getRefreshToken(String userName) {
         System.out.println("getRefreshToken");
         return null;
     }
 
-    public static void deleteRefreshToken(UUID playerId, String refreshToken) {
+    //change
+    public static void deleteRefreshToken(String userName) {
         System.out.println("deleteRefreshToken");
     }
 
@@ -54,8 +57,5 @@ public class PlayerDatabaseInterface {
         System.out.println("getPlayer");
         return null;
     }
-
-
-    
 
 }

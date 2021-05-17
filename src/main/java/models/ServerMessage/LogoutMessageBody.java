@@ -1,16 +1,14 @@
 package models.ServerMessage;
 
-import java.util.UUID;
-
 public class LogoutMessageBody {
     private String refreshToken;
-    private UUID playerId;
+    private String userName;
 
-    public LogoutMessageBody(String refreshToken, UUID playerId){
+    public LogoutMessageBody(String refreshToken, String userName){
         this.refreshToken = refreshToken;
-        this.playerId = playerId;
+        this.userName = userName;
     }
 
     public String getRefreshToken(){ return refreshToken; }
-    public UUID getPlayerId(){return playerId;}
+    public String getUsername(){return userName;}
 }

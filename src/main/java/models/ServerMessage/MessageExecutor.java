@@ -1,49 +1,43 @@
-package models.ServerMessage;
+package models.ServerMessage; 
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class MessageExecutor {
+public class MessageExecutor extends Thread{
+    private static MessageExecutor instance;
 
-    private static MessageExecutor instance; //
-
-    private ExecutorService executor; //
-
-    // private FixedThre
-
-    //private LinkedBlockingQueue<Runnable> queue; //
+    private ExecutorService executor;
+    private LinkedBlockingQueue<Runnable> queue; 
     
-   /** 
-    * 
-    *  
-    */
     private MessageExecutor(){
         executor = Executors.newFixedThreadPool(20);
-
-       // queue = new LinkedBlockingQueue<Runnable>();
+        queue = new LinkedBlockingQueue<Runnable>();
     }
 
-   /** 
-    * 
-    *  
-    */
     public void queueMessageHandler(Runnable handler) throws InterruptedException{
-       // queue.(handler);
-       executor.submit(handler);
+        System.out.println("Inside of Executor");
+        queue.put(handler);
     }
     
-   /** 
-    * 
-    * 
-    */
-    public void run() /*throws InterruptedException*/{
+    public void run() {
+        System.out.println("Inside of Executor2");
+        int count = 3;
 
-        while(true){
-            
-        }
-
-       // System.out.print("made it 2");
+        boolean flag = true;
+        //while(flag){
+            if(!queue.isEmpty()){
+                try {
+                    executor.execute(queue.take());
+                } catch (/*InterruptedException*/ Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                System.out.println("Inside of Executor end");
+                flag = false;
+            }
+       // }
     }
 
    /** 
@@ -53,9 +47,9 @@ public class MessageExecutor {
     * @return   
     */
     public static MessageExecutor getInstance(){
-        
-        if(instance == null)
+        if(instance == null){
             instance = new MessageExecutor();
+        }
 
         return instance; 
     }

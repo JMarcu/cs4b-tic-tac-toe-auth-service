@@ -35,7 +35,7 @@ public class LoginHandler implements Runnable{
            String refreshToken = JWTService.create();
            
            //player.getUuid()
-          PlayerDatabaseInterface.setRefreshToken(UUID.randomUUID(), refreshToken);
+          PlayerDatabaseInterface.setRefreshToken(userName, refreshToken);
 
         //    try {
         //        sender.send(new Message(new LoginSuccessMessageBody(jwt, refreshToken), MessageType.LOGIN_SUCCESS));

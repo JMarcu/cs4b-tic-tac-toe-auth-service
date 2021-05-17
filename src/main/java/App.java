@@ -22,30 +22,33 @@ public class App {
     private final String SERVICE_NAME = "auth-service";
     
     public static void main(String[] args) throws Exception {
-       final App app = new App();
-        app.launchServer();
+    //    final App app = new App();
+    //     app.launchServer();
 
-        // WebsocketEndpoint webSocket = new WebsocketEndpoint();
+        WebsocketEndpoint webSocket = new WebsocketEndpoint();
 
         // LoginMessageBody body = new LoginMessageBody("Grant", "password");
         // String message = new Gson().toJson(new Message(body, MessageType.LOGIN ));
 
-        // LogoutMessageBody body = new LogoutMessageBody("Grant", UUID.randomUUID());
+        // LogoutMessageBody body = new LogoutMessageBody("Grant", "Grant");
         // String message = new Gson().toJson(new Message(body, MessageType.LOGOUT ));
 
-        // RegisterMessageBody body = new RegisterMessageBody("Grant", "password");
-        // String message = new Gson().toJson(new Message(body, MessageType.REGISTER ));
+        RegisterMessageBody body = new RegisterMessageBody("Grant", "password");
+        String message = new Gson().toJson(new Message(body, MessageType.REGISTER ));
 
-        // RefreshTokenMessageBody body = new RefreshTokenMessageBody("Grant", UUID.randomUUID());
+        // RefreshTokenMessageBody body = new RefreshTokenMessageBody("Grant", "Grant");
         // String message = new Gson().toJson(new Message(body, MessageType.REFRESH_TOKEN ));
 
-        // RequestPlayerMessageBody body = new RequestPlayerMessageBody(UUID.randomUUID());
+        // RequestPlayerMessageBody body = new RequestPlayerMessageBody(UUID.randomUUID(), "Grant");
         // String message = new Gson().toJson(new Message(body, MessageType.REQUEST_PLAYER ));
 
+        webSocket.onMessage(message); 
+        RefreshTokenMessageBody body1 = new RefreshTokenMessageBody("Grant", "Grant");
+        message = new Gson().toJson(new Message(body1, MessageType.REFRESH_TOKEN ));
 
-       // webSocket.onOpen(this);
-        // webSocket.onMessage(message); 
-        // System.out.println("end");
+        webSocket.onMessage(message);
+
+        System.out.println("end");
     }
 
     private void launchServer() {
