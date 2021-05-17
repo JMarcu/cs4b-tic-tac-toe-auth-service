@@ -1,54 +1,13 @@
 import java.io.*;
-import java.net.http.WebSocket;
 import java.nio.channels.FileChannel;
-import java.util.UUID;
-
-import javax.websocket.Session;
-
-import com.google.gson.Gson;
-
 import org.apache.catalina.startup.Tomcat;
-
-import models.ServerMessage.LoginMessageBody;
-import models.ServerMessage.LogoutMessageBody;
-import models.ServerMessage.Message;
-import models.ServerMessage.MessageType;
-import models.ServerMessage.RefreshTokenMessageBody;
-import models.ServerMessage.RegisterMessageBody;
-import models.ServerMessage.RequestPlayerMessageBody;
-import routes.WebsocketEndpoint;
 
 public class App {
     private final String SERVICE_NAME = "auth-service";
     
     public static void main(String[] args) throws Exception {
-    //    final App app = new App();
-    //     app.launchServer();
-
-        WebsocketEndpoint webSocket = new WebsocketEndpoint();
-
-        // LoginMessageBody body = new LoginMessageBody("Grant", "password");
-        // String message = new Gson().toJson(new Message(body, MessageType.LOGIN ));
-
-        // LogoutMessageBody body = new LogoutMessageBody("Grant", "Grant");
-        // String message = new Gson().toJson(new Message(body, MessageType.LOGOUT ));
-
-        RegisterMessageBody body = new RegisterMessageBody("Grant", "password");
-        String message = new Gson().toJson(new Message(body, MessageType.REGISTER ));
-
-        // RefreshTokenMessageBody body = new RefreshTokenMessageBody("Grant", "Grant");
-        // String message = new Gson().toJson(new Message(body, MessageType.REFRESH_TOKEN ));
-
-        // RequestPlayerMessageBody body = new RequestPlayerMessageBody(UUID.randomUUID(), "Grant");
-        // String message = new Gson().toJson(new Message(body, MessageType.REQUEST_PLAYER ));
-
-        webSocket.onMessage(message); 
-        RefreshTokenMessageBody body1 = new RefreshTokenMessageBody("Grant", "Grant");
-        message = new Gson().toJson(new Message(body1, MessageType.REFRESH_TOKEN ));
-
-        webSocket.onMessage(message);
-
-        System.out.println("end");
+        final App app = new App();
+        app.launchServer();
     }
 
     private void launchServer() {
