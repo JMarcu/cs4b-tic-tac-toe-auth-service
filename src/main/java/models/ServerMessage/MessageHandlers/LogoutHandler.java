@@ -3,8 +3,8 @@ package models.ServerMessage.MessageHandlers;
 import java.io.IOException;
 import java.util.UUID;
 
+import interfaces.PlayerDatabaseInterface;
 import interfaces.Sender;
-import models.PlayerDatabaseInterface;
 import models.ServerMessage.Message;
 import models.ServerMessage.MessageType;
 import services.JWTService;
@@ -23,10 +23,10 @@ public class LogoutHandler implements Runnable{
 
     @Override
     public void run() {
-        String refreshToken = PlayerDatabaseInterface.getRefreshToken(playerId);
+        String refreshToken = PlayerDatabaseInterface.getInstance().getRefreshToken(playerId);
         
         if(JWTService.validate(token)){
-            PlayerDatabaseInterface.deleteRefreshToken(playerId);
+            PlayerDatabaseInterface.getInstance().deleteRefreshToken(playerId);
             // try {
             //     sender.send(new Message(null, MessageType.LOGOUT_SUCCESS));
             // } catch (IOException e) {

@@ -2,11 +2,14 @@ import java.io.*;
 import java.nio.channels.FileChannel;
 import org.apache.catalina.startup.Tomcat;
 
+import models.ServerMessage.MessageExecutor;
+
 public class App {
     private final String SERVICE_NAME = "auth-service";
     
     public static void main(String[] args) throws Exception {
         final App app = new App();
+        MessageExecutor.getInstance().start();
         app.launchServer();
     }
 

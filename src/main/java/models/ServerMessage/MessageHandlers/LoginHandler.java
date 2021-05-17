@@ -3,9 +3,9 @@ package models.ServerMessage.MessageHandlers;
 import java.io.IOException;
 import java.util.UUID;
 
+import interfaces.PlayerDatabaseInterface;
 import interfaces.Sender;
 import models.Player;
-import models.PlayerDatabaseInterface;
 import models.ServerMessage.LoginSuccessMessageBody;
 import models.ServerMessage.Message;
 import models.ServerMessage.MessageType;
@@ -25,31 +25,27 @@ public class LoginHandler implements Runnable{
 
     @Override
     public void run() {
-
-        boolean isPasswordValid = PlayerDatabaseInterface.validatePassword(userName, password);
+        boolean isPasswordValid = PlayerDatabaseInterface.getInstance().validatePassword(userName, password);
 
         if(isPasswordValid){
-           Player player = PlayerDatabaseInterface.getPlayer(UUID.randomUUID());
-
-           String jwt = JWTService.create();
-           String refreshToken = JWTService.create();
+            String jwt = JWTService.create();
+            UUID refreshToken = UUID.randomUUID();
            
-           //player.getUuid()
-          PlayerDatabaseInterface.setRefreshToken(userName, refreshToken);
+            PlayerDatabaseInterface.getInstance().setRefreshToken(userName, refreshToken.toString());
 
-        //    try {
-        //        sender.send(new Message(new LoginSuccessMessageBody(jwt, refreshToken), MessageType.LOGIN_SUCCESS));
-        //     } 
-        //     catch (IOException e) {
-        //         e.printStackTrace();
-        //     }
-        }
-        else{
-            // try {
-            //     sender.send(new Message(null, MessageType.LOGIN_FAIL));
-            // } catch (IOException e) {
-            //     e.printStackTrace();
-            // }
+            LoginSuccessMessageBody body = new LoginSuccessMessageBody(jwt, refreshToken.toString());
+            Message msg = new Message(body, MessageType.LOGOUT_SUCCESS);
+            try {
+                sender.send(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else{
+            try {
+                sender.send(new Message(null, MessageType.LOGIN_FAIL));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }        
     }
 }

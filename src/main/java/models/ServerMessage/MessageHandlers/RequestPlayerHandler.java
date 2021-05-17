@@ -1,12 +1,8 @@
 package models.ServerMessage.MessageHandlers;
 
-import java.io.IOException;
 import java.util.UUID;
-
+import interfaces.PlayerDatabaseInterface;
 import interfaces.Sender;
-import models.PlayerDatabaseInterface;
-import models.ServerMessage.Message;
-import models.ServerMessage.MessageType;
 
 public class RequestPlayerHandler implements Runnable{
 
@@ -27,6 +23,6 @@ public class RequestPlayerHandler implements Runnable{
         //     e.printStackTrace();
         // }
 
-        PlayerDatabaseInterface.getPlayer(playerId);
+        PlayerDatabaseInterface.getInstance().getPlayer(playerId);
     }    
 }
