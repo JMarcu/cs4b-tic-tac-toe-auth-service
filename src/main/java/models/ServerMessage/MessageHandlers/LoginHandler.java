@@ -35,7 +35,7 @@ public class LoginHandler implements Runnable{
            
             PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
-            LoginSuccessMessageBody body = new LoginSuccessMessageBody(jwt, refreshToken.toString());
+            LoginSuccessMessageBody body = new LoginSuccessMessageBody(jwt, refreshToken.toString(), player);
             Message msg = new Message(body, MessageType.LOGIN_SUCCESS);
             try {
                 sender.send(msg);
