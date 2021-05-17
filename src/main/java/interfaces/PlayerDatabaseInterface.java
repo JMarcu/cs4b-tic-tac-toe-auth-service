@@ -222,7 +222,8 @@ public class PlayerDatabaseInterface {
         Player player;
         MarkerShape shape = MarkerShape.CAT;
         Color color = Color.BLACK;
-        String username = "";
+        String usernameTwo = username;
+        String playid = "";
 
 
         try{
@@ -232,10 +233,10 @@ public class PlayerDatabaseInterface {
             ResultSet rs = stmt.executeQuery();   
             while (rs.next())
             {
-                String id = rs.getString(1);
+                playid = rs.getString(1);
                 shape = MarkerShape.valueOf(rs.getString(2));
                 color = Color.valueOf(rs.getString(3));
-                username = rs.getString(4);
+                usernameTwo = rs.getString(4);
             }
             //close everything
             rs.close();
@@ -248,7 +249,7 @@ public class PlayerDatabaseInterface {
                 System.out.print("Error in PlayerDatabaseInterface");
             }
 
-        player = new Player(color, playerId, username, shape); // CHANGE
+        player = new Player(color, UUID.fromString(playid), username, shape); // CHANGE
         //TODO
         return player;
     }
