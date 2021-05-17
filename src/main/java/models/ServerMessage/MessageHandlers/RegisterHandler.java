@@ -26,12 +26,15 @@ public class RegisterHandler implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Running Register MessageHandler.");
         try {
             
             if(PlayerDatabaseInterface.userNameIsUnique(userName)){
-                // System.out.println("made it");
+                System.out.println("Name is Unique");
 
                 if(PlayerDatabaseInterface.setPassword(userName, password)){
+                    System.out.println("Password Set");
+                    
                     Player player = new Player();
                     player.setName(userName);
                     PlayerDatabaseInterface.setplayer(player);
@@ -40,24 +43,20 @@ public class RegisterHandler implements Runnable {
                     String refreshToken = JWTService.create(); //change this maybe
 
                     PlayerDatabaseInterface.setRefreshToken(userName, refreshToken);
-                    //sender.send(new Message(RegistrationResultType.SUCCESS, MessageType.REGISTRATION_RESULT)); 
-                }
-                else{
+                    sender.send(new Message(RegistrationResultType.SUCCESS, MessageType.REGISTRATION_RESULT)); 
+                } else{
                     sender.send(new Message(RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS, MessageType.REGISTRATION_RESULT)); 
                 }
-            }
-            else{
+            } else{
                 sender.send(new Message(RegistrationResultType.USERNAME_ALREADY_EXISTS, MessageType.REGISTRATION_RESULT));
             }     
               
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
 
             try {
                 sender.send(new Message(RegistrationResultType.UNKNOWN_ERROR, MessageType.REGISTRATION_RESULT));
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }   

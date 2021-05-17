@@ -58,7 +58,6 @@ public class WebsocketEndpoint implements Sender {
         switch(message.getType()){
             case LOGIN:
                 LoginMessageBody loginBody = gson.fromJson(message.getBody(), LoginMessageBody.class);
-
                 handler = new LoginHandler(loginBody.getUsername(), loginBody.getPassword(), this);
                 break;
             case LOGIN_FAIL:
@@ -115,8 +114,8 @@ public class WebsocketEndpoint implements Sender {
                 }
                 break;
             case REGISTER:
+                System.out.println("Register Message Received: " + message.getBody());
                 RegisterMessageBody registerBody = gson.fromJson(message.getBody(), RegisterMessageBody.class);
-
                 handler = new RegisterHandler(registerBody.getUsername(), registerBody.getPassword(), this);
                 break;
             case REGISTRATION_RESULT:
