@@ -39,13 +39,12 @@ public class RegisterHandler implements Runnable {
                 if(PlayerDatabaseInterface.getInstance().setPassword(userName, password, player.getUuid())){
                     System.out.println("Password Set");
                     
-
                     String jwt = JWTService.create();
                     UUID refreshToken = UUID.randomUUID(); //change this maybe
 
                     PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
-                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS);
+                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS, player);
                     sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 
                 } else{
                     RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS);
