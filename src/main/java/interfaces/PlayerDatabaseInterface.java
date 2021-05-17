@@ -24,12 +24,12 @@ public class PlayerDatabaseInterface {
         Connection conn = getConn();
         Statement stmt = conn.createStatement();
 
-        //create LoginCredentials / RefreshTokens table
-        String sql = "CREATE TABLE IF NOT EXISTS LoginCredentials (username VARCHAR(255) not NULL, password VARCHAR(255) not NULL, refreshToken VARCHAR(255) not NULL, PRIMARY KEY (username))";
+        //create Players table
+        String sql = "CREATE TABLE IF NOT EXISTS Players (playerId VARCHAR(255) not NULL, markerShape VARCHAR(255) not NULL, markerColor VARCHAR(255) not NULL, username VARCHAR(255) not NULL, PRIMARY KEY (playerId))";
         stmt.executeUpdate(sql);
 
-        //create Players table
-        sql = "CREATE TABLE IF NOT EXISTS Players (playerId VARCHAR(255) not NULL, markerShape VARCHAR(255) not NULL, markerColor VARCHAR(255) not NULL, username VARCHAR(255) not NULL, PRIMARY KEY (playerId), FOREIGN KEY (username) REFERENCES LoginCredentials(username))";
+         //create LoginCredentials / RefreshTokens table
+        sql = "CREATE TABLE IF NOT EXISTS LoginCredentials (username VARCHAR(255) not NULL, password VARCHAR(255) not NULL, refreshToken VARCHAR(255) not NULL, playerId VARCHAR(255) not NULL, PRIMARY KEY (username)), FOREIGN KEY (playerId) REFERENCES Players(playerId)";
         stmt.executeUpdate(sql);
 
         //close everything
@@ -88,7 +88,7 @@ public class PlayerDatabaseInterface {
         return isValid;
     }
     
-    public Boolean setPassword(String username, String password){
+    public Boolean setPassword(String username, String password, UUID playerId){
         Boolean isSet = false; // change
         //TODO
         //use sha1 or other hash generator to make hash
@@ -97,10 +97,11 @@ public class PlayerDatabaseInterface {
         //Values(playerId, hash);
         try{
             Connection conn = getConn();
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO LoginCredentials(username, password, refreshToken) VALUES (?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO LoginCredentials(username, password, refreshToken, playerId) VALUES (?,?,?,?)");
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.setString(3, "");
+            stmt.setString(4, playerId.toString());
             stmt.executeUpdate();
             //close everything
             stmt.close();
@@ -118,14 +119,14 @@ public class PlayerDatabaseInterface {
         return isSet;
     }
 
-    public String getRefreshToken(String username){
+    public String getRefreshToken(UUID playerId){
         //TODO
         //SELECT token FROM tokens WHERE playerNum = playerId;
         String storedToken = "";
         try{
             Connection conn = getConn();
-            PreparedStatement stmt = conn.prepareStatement("SELECT refreshToken FROM LoginCredentials WHERE username = ?");
-            stmt.setString(1, username);
+            PreparedStatement stmt = conn.prepareStatement("SELECT refreshToken FROM LoginCredentials WHERE playerId = ?");
+            stmt.setString(1, playerId.toString());
             ResultSet rs = stmt.executeQuery();   
             while (rs.next())
             {
@@ -144,15 +145,15 @@ public class PlayerDatabaseInterface {
         return storedToken;
     }
 
-    public void setRefreshToken(String username, String token){
+    public void setRefreshToken(UUID playerId, String token){
         //TODO
         //INSERT INTO RefreshTokens
         //throw an error if it doesn't work
         try{
             Connection conn = getConn();
-            PreparedStatement stmt = conn.prepareStatement("UPDATE LoginCredentials SET refreshToken = ? WHERE username = ?");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE LoginCredentials SET refreshToken = ? WHERE playerId = ?");
             stmt.setString(1, token);
-            stmt.setString(2, username);
+            stmt.setString(2, playerId.toString());
             stmt.executeUpdate();
             //close everything
             stmt.close();
@@ -164,13 +165,13 @@ public class PlayerDatabaseInterface {
             }
     }
 
-    public void deleteRefreshToken(String username){
+    public void deleteRefreshToken(UUID playerId){
         //TODO
         try{
             Connection conn = getConn();
-            PreparedStatement stmt = conn.prepareStatement("UPDATE LoginCredentials SET refreshToken = ? WHERE username = ?");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE LoginCredentials SET refreshToken = ? WHERE playerID = ?");
             stmt.setString(1, "");
-            stmt.setString(2, username);
+            stmt.setString(2, playerId.toString());
             stmt.executeUpdate();
             //close everything
             stmt.close();
