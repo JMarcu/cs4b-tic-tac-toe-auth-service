@@ -29,7 +29,7 @@ public class PlayerDatabaseInterface {
         stmt.executeUpdate(sql);
 
          //create LoginCredentials / RefreshTokens table
-        sql = "CREATE TABLE IF NOT EXISTS LoginCredentials (username VARCHAR(255) not NULL, password VARCHAR(255) not NULL, refreshToken VARCHAR(255) not NULL, playerId VARCHAR(255) not NULL, PRIMARY KEY (username)), FOREIGN KEY (playerId) REFERENCES Players(playerId)";
+        sql = "CREATE TABLE IF NOT EXISTS LoginCredentials (username VARCHAR(255) not NULL, password VARCHAR(255) not NULL, refreshToken VARCHAR(255) not NULL, playerId VARCHAR(255) not NULL, PRIMARY KEY (username), FOREIGN KEY (playerId) REFERENCES Players(playerId))";
         stmt.executeUpdate(sql);
 
         //close everything

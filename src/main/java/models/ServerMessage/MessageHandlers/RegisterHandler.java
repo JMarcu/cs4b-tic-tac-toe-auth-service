@@ -30,7 +30,6 @@ public class RegisterHandler implements Runnable {
     public void run() {
         System.out.println("Running Register MessageHandler.");
         try {
-            
             if(PlayerDatabaseInterface.getInstance().userNameIsUnique(userName)){
                 System.out.println("Name is Unique");
 
