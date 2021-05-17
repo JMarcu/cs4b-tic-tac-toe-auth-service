@@ -2,6 +2,9 @@ package models;
 
 import java.util.concurrent.Flow;
 import java.util.concurrent.Flow.Subscriber;
+
+import com.google.gson.annotations.Expose;
+
 import java.util.concurrent.SubmissionPublisher;
 import java.io.Serializable;
 import java.util.UUID;
@@ -65,6 +68,7 @@ public class Player implements Serializable {
     private String name;
 
     /** A {@link java.util.concurrent.Flow.Publisher} implementation that handles our subscriptions. */
+    @Expose(serialize = false)
     private SubmissionPublisher<Player.Patch> publisher;
 
     /** The shape of the player's marker. */
