@@ -16,28 +16,25 @@ public class MessageExecutor extends Thread{
     }
 
     public void queueMessageHandler(Runnable handler) throws InterruptedException{
-        System.out.println("Inside of Executor");
+        System.out.println("Queing Handler");
         queue.put(handler);
     }
     
     public void run() {
-        System.out.println("Inside of Executor2");
-        int count = 3;
+        System.out.println("Beginning Executor");
 
-        boolean flag = true;
-        //while(flag){
+        while(true){
             if(!queue.isEmpty()){
                 try {
                     executor.execute(queue.take());
-                } catch (/*InterruptedException*/ Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             else{
                 System.out.println("Inside of Executor end");
-                flag = false;
             }
-       // }
+       }
     }
 
    /** 
