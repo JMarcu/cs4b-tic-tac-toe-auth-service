@@ -49,17 +49,20 @@ public class RegisterHandler implements Runnable {
                     RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS);
                     sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 
                 } else{
-                    sender.send(new Message(RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS, MessageType.REGISTRATION_RESULT)); 
+                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS);
+                    sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 
                 }
             } else{
-                sender.send(new Message(RegistrationResultType.USERNAME_ALREADY_EXISTS, MessageType.REGISTRATION_RESULT));
+                RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.USERNAME_ALREADY_EXISTS);
+                sender.send(new Message(body, MessageType.REGISTRATION_RESULT));
             }     
               
         } catch (IOException e) {
             e.printStackTrace();
 
             try {
-                sender.send(new Message(RegistrationResultType.UNKNOWN_ERROR, MessageType.REGISTRATION_RESULT));
+                RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.UNKNOWN_ERROR);
+                sender.send(new Message(body, MessageType.REGISTRATION_RESULT));
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
