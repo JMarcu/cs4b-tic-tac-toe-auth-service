@@ -1,14 +1,16 @@
 package routes;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import interfaces.Sender;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
+
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.Session;
-
 import models.ServerMessage.AuthenticationRequestMessageBody;
 import models.ServerMessage.AuthenticationResultMessageBody;
 import models.ServerMessage.LoginFailMessageBody;
@@ -53,7 +55,7 @@ public class WebsocketEndpoint implements Sender {
     public void onMessage(String messageString) throws InterruptedException {
         Runnable handler = null;
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
         Message message = gson.fromJson(messageString, Message.class);
         switch(message.getType()){
             case LOGIN:
@@ -173,6 +175,7 @@ public class WebsocketEndpoint implements Sender {
     }
 
     public void send(Message message) throws IOException{
-        session.getBasicRemote().sendText(new Gson().toJson(message));
+        Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
+        session.getBasicRemote().sendText(gson.toJson(message));
     }
 }

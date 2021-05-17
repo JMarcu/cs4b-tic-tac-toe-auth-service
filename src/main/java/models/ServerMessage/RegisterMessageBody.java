@@ -4,13 +4,13 @@ import java.util.UUID;
 
 public class RegisterMessageBody {
     private String password;
-    private String userName;
+    private String username;
 
-    public RegisterMessageBody(String password, UUID playerId, String userName){
+    public RegisterMessageBody(String password, UUID playerId, String username){
         this.password = password;
-        this.userName = userName;
+        this.username = username;
     }
 
     public String getPassword(){ return password; }
-    public String getUserName() { return userName;}
+    public String getUserName() { return username;}
 }

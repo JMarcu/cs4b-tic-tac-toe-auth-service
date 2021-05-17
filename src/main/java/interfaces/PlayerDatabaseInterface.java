@@ -112,7 +112,7 @@ public class PlayerDatabaseInterface {
             }
             catch(Exception ex)
             {
-                System.out.print("Error in PlayerDatabaseInterface");
+                System.out.print("Error in PlayerDatabaseInterface :: " + ex.getMessage());
             }
        
 
@@ -122,9 +122,10 @@ public class PlayerDatabaseInterface {
     public String getRefreshToken(UUID playerId){
         //TODO
         //SELECT token FROM tokens WHERE playerNum = playerId;
-        String storedToken = "";
+        String storedToken = null;
         try{
             Connection conn = getConn();
+            System.out.println("playerId: " + playerId);
             PreparedStatement stmt = conn.prepareStatement("SELECT refreshToken FROM LoginCredentials WHERE playerId = ?");
             stmt.setString(1, playerId.toString());
             ResultSet rs = stmt.executeQuery();   
@@ -132,16 +133,17 @@ public class PlayerDatabaseInterface {
             {
                 storedToken = rs.getString(1);
             }
+            System.out.println("storedToken: " + storedToken);
             //close everything
             rs.close();
             stmt.close();
             conn.close();
     
-            }
-            catch(Exception ex)
-            {
-                System.out.print("Error in PlayerDatabaseInterface");
-            }
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Error in PlayerDatabaseInterface :: " + ex.getMessage());
+        }
         return storedToken;
     }
 

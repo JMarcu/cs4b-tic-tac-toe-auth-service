@@ -19,7 +19,6 @@ public class RegisterHandler implements Runnable {
     private String userName;
     private String password;
 
-
     public RegisterHandler(String userName, String password, Sender sender){
         this.userName = userName;
         this.password = password;
@@ -30,7 +29,6 @@ public class RegisterHandler implements Runnable {
     public void run() {
         System.out.println("Running Register MessageHandler.");
         try {
-            
             if(PlayerDatabaseInterface.getInstance().userNameIsUnique(userName)){
                 System.out.println("Name is Unique");
 
@@ -41,13 +39,12 @@ public class RegisterHandler implements Runnable {
                 if(PlayerDatabaseInterface.getInstance().setPassword(userName, password, player.getUuid())){
                     System.out.println("Password Set");
                     
-
                     String jwt = JWTService.create();
                     UUID refreshToken = UUID.randomUUID(); //change this maybe
 
                     PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
-                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS);
+                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS, player);
                     sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 
                 } else{
                     RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS);
