@@ -112,7 +112,7 @@ public class PlayerDatabaseInterface {
             }
             catch(Exception ex)
             {
-                System.out.print("Error in PlayerDatabaseInterface");
+                System.out.print("Error in PlayerDatabaseInterface :: " + ex.getMessage());
             }
        
 
