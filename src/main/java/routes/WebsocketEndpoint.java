@@ -175,6 +175,7 @@ public class WebsocketEndpoint implements Sender {
     }
 
     public void send(Message message) throws IOException{
-        session.getBasicRemote().sendText(new Gson().toJson(message));
+        Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
+        session.getBasicRemote().sendText(gson.toJson(message));
     }
 }
