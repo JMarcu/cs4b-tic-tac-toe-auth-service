@@ -31,10 +31,10 @@ public class LoginHandler implements Runnable{
         boolean isPasswordValid = PlayerDatabaseInterface.getInstance().validatePassword(userName, password);
 
         if(isPasswordValid){
-            String jwt = JWTService.create();
-            UUID refreshToken = UUID.randomUUID();
-
             Player player = PlayerDatabaseInterface.getInstance().getPlayer(userName);
+
+            String jwt = JWTService.create(player);
+            UUID refreshToken = UUID.randomUUID();
            
             PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
