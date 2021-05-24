@@ -24,5 +24,6 @@ public enum MessageType {
     REGISTRATION_RESULT,
     REGISTER,
     REQUEST_PLAYER,
+    REQUESTED_PLAYER,
     UNKNOWN
 }

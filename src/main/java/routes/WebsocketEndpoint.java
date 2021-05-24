@@ -28,6 +28,7 @@ import models.ServerMessage.RegisterMessageBody;
 import models.ServerMessage.RegistrationResultMessageBody;
 import models.ServerMessage.RegistrationResultType;
 import models.ServerMessage.RequestPlayerMessageBody;
+import models.ServerMessage.RequestedPlayerMessageBody;
 import models.ServerMessage.MessageHandlers.AuthenticationRequestHandler;
 import models.ServerMessage.MessageHandlers.AuthenticationResultHandler;
 import models.ServerMessage.MessageHandlers.LoginHandler;
@@ -106,14 +107,14 @@ public class WebsocketEndpoint implements Sender {
               
                 break;
             case PLAYER_PROPERTIES:
-                PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
+               // PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
 
-                try {
-                    send(new Message(playerPropertiesBody, MessageType.PLAYER_PROPERTIES));
-                } catch (IOException e) {
-                    System.out.println("PLAYER PROPERTIES");
-                    e.printStackTrace();
-                }
+                // try {
+                //    send(new Message(, MessageType.PLAYER_PROPERTIES));
+                // } catch (IOException e) {
+                //     System.out.println("PLAYER PROPERTIES");
+                //     e.printStackTrace();
+                // }
                 break;
             case REGISTER:
                 System.out.println("Register Message Received: " + message.getBody());
@@ -167,6 +168,17 @@ public class WebsocketEndpoint implements Sender {
                 RequestPlayerMessageBody requestPlayerBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
 
                 handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
+                break;  
+            case REQUESTED_PLAYER:
+                RequestedPlayerMessageBody requestedPlayerBody = gson.fromJson(message.getBody(), RequestedPlayerMessageBody.class);
+
+                try {
+                   send(new Message(requestedPlayerBody.getPlayer(), MessageType.REQUESTED_PLAYER));
+                } catch (IOException e) {
+                    System.out.println("PLAYER PROPERTIES");
+                    e.printStackTrace();
+                }
+               
                 break;  
             default:
                 break;

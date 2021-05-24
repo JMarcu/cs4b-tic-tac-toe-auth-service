@@ -1,8 +1,12 @@
 package models.ServerMessage.MessageHandlers;
 
+import java.io.IOException;
 import java.util.UUID;
 import interfaces.PlayerDatabaseInterface;
 import interfaces.Sender;
+import models.Player;
+import models.ServerMessage.Message;
+import models.ServerMessage.MessageType;
 
 public class RequestPlayerHandler implements Runnable{
 
@@ -16,13 +20,15 @@ public class RequestPlayerHandler implements Runnable{
 
     @Override
     public void run() {
-        // try {
-        //     sender.send(new Message(PlayerDatabaseInterface.getPlayer(playerId), MessageType.PLAYER_PROPERTIES));
-        // } catch (IOException e) {
-        //     // TODO Auto-generated catch block
-        //     e.printStackTrace();
-        // }
+        try {
+            Player player = PlayerDatabaseInterface.getInstance().getPlayer(playerId);
 
-        PlayerDatabaseInterface.getInstance().getPlayer(playerId);
+            
+            sender.send(new Message(player, MessageType.REQUESTED_PLAYER));
+            
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }    
 }
