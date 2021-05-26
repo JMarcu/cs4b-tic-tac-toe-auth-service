@@ -175,8 +175,6 @@ public class WebsocketEndpoint implements Sender {
                 handler = new RefreshTokenHandler(refreshTokenBody.getPlayerId(), refreshTokenBody.getRefreshToken(), this);
                 break;
             case REQUEST_PLAYER:
-                System.out.println();
-                System.out.println("Message Received: REQUEST_PLAYER");
                 RequestPlayerMessageBody requestPlayerBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
 
                 handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
@@ -208,6 +206,7 @@ public class WebsocketEndpoint implements Sender {
 
     public void send(Message message) throws IOException{
         Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
+        System.out.println("gson.toJson(message): " + gson.toJson(message));
         session.getBasicRemote().sendText(gson.toJson(message));
     }
 }
