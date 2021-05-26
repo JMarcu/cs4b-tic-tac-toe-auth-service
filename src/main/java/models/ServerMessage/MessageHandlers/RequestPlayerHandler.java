@@ -7,6 +7,7 @@ import interfaces.Sender;
 import models.Player;
 import models.ServerMessage.Message;
 import models.ServerMessage.MessageType;
+import models.ServerMessage.RequestedPlayerMessageBody;
 
 public class RequestPlayerHandler implements Runnable{
 
@@ -27,7 +28,7 @@ public class RequestPlayerHandler implements Runnable{
             System.out.println("Player name: " + player.getName());
             System.out.println("Player id: " + player.getUuid());
             System.out.println("Leaving RequestPlayerHandler");
-            sender.send(new Message(player, MessageType.REQUESTED_PLAYER));
+            sender.send(new Message(new RequestedPlayerMessageBody(player), MessageType.REQUESTED_PLAYER));
             
         } catch (IOException e) {
             // TODO Auto-generated catch block
