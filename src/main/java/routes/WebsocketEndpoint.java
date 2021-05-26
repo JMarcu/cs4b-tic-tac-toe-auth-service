@@ -56,6 +56,8 @@ public class WebsocketEndpoint implements Sender {
     public void onMessage(String messageString) throws InterruptedException {
         Runnable handler = null;
 
+        System.out.print("Message Received");
+
         Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
         Message message = gson.fromJson(messageString, Message.class);
         switch(message.getType()){
