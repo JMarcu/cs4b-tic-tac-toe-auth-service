@@ -27,7 +27,7 @@ public class RequestPlayerHandler implements Runnable{
             System.out.println("Player name: " + player.getName());
             System.out.println("Player id: " + player.getUuid());
             System.out.println();
-            
+            System.out.println("Leaving RequestPlayerHandler");
             sender.send(new Message(player, MessageType.REQUESTED_PLAYER));
             
         } catch (IOException e) {

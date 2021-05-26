@@ -56,12 +56,13 @@ public class WebsocketEndpoint implements Sender {
     public void onMessage(String messageString) throws InterruptedException {
         Runnable handler = null;
 
-////////////////
-        System.out.print("Message Received");
-/////////////////////
-
         Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
         Message message = gson.fromJson(messageString, Message.class);
+
+        ////////////////
+        System.out.println("Message Received: " + message.getType());
+        /////////////////////
+
         switch(message.getType()){
             case LOGIN:
                 LoginMessageBody loginBody = gson.fromJson(message.getBody(), LoginMessageBody.class);
@@ -174,6 +175,8 @@ public class WebsocketEndpoint implements Sender {
                 handler = new RefreshTokenHandler(refreshTokenBody.getPlayerId(), refreshTokenBody.getRefreshToken(), this);
                 break;
             case REQUEST_PLAYER:
+                System.out.println();
+                System.out.println("Message Received: REQUEST_PLAYER");
                 RequestPlayerMessageBody requestPlayerBody = gson.fromJson(message.getBody(), RequestPlayerMessageBody.class);
 
                 handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
