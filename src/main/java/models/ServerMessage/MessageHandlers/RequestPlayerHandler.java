@@ -23,7 +23,8 @@ public class RequestPlayerHandler implements Runnable{
         try {
             Player player = PlayerDatabaseInterface.getInstance().getPlayer(playerId);
 
-            
+            System.out.println("Player Name: " + player.getName());
+
             sender.send(new Message(player, MessageType.REQUESTED_PLAYER));
             
         } catch (IOException e) {
