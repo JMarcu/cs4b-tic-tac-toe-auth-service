@@ -21,21 +21,11 @@ public class RequestPlayerHandler implements Runnable{
     @Override
     public void run() {
         try {
-
-            System.out.println();
-            System.out.println();
-            System.out.println("ID: " + playerId);
-            System.out.println();
-            System.out.println();
-
-
             Player player = PlayerDatabaseInterface.getInstance().getPlayer(playerId);
 
             System.out.println();
-            System.out.println();
             System.out.println("Player name: " + player.getName());
             System.out.println("Player id: " + player.getUuid());
-            System.out.println();
             System.out.println();
             
             sender.send(new Message(player, MessageType.REQUESTED_PLAYER));
