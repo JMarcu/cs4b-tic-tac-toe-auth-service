@@ -182,6 +182,8 @@ public class WebsocketEndpoint implements Sender {
                 RequestedPlayerMessageBody requestedPlayerBody = gson.fromJson(message.getBody(), RequestedPlayerMessageBody.class);
 
                 System.out.println();
+                System.out.println("Message Received: REQUESTED_PLAYER");
+                System.out.println();
                 System.out.println();
                 System.out.println("Player name: " + requestedPlayerBody.getPlayer().getName());
                 System.out.println("Player id: " + requestedPlayerBody.getPlayer().getUuid());
