@@ -29,7 +29,7 @@ public class JWTService {
     private static final String ISSUER = "auth0";
 
     /** How many minutes tokens are valid for before they expire. */
-    private static final int MINUTES_TO_EXPIRATION = 5;
+    private static final int MINUTES_TO_EXPIRATION = 60;
 
     /** Name of the environment variable used to inject the secret used in HMAC algorithms. */
     private static final String SECRET_ENV_VAR = "SECRET";

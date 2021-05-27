@@ -132,6 +132,7 @@ public class PlayerDatabaseInterface {
             while (rs.next())
             {
                 storedToken = rs.getString(1);
+                System.out.println("StoredToken is: " + storedToken);
             }
             System.out.println("storedToken: " + storedToken);
             //close everything
