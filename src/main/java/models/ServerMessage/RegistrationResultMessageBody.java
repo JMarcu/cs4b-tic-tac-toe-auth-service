@@ -16,7 +16,7 @@ public class RegistrationResultMessageBody {
     }
 
     public RegistrationResultMessageBody(RegistrationResultType result, Player player, String jwt, String refreshToken){
-        this.jwt = null;
+        this.jwt = jwt;
         this.player = player;
         this.refreshToken = refreshToken;
         this.result = result;
