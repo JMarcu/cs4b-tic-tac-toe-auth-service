@@ -59,10 +59,6 @@ public class WebsocketEndpoint implements Sender {
         Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
         Message message = gson.fromJson(messageString, Message.class);
 
-        ////////////////
-        System.out.println("Message Received: " + message.getType());
-        /////////////////////
-
         switch(message.getType()){
             case LOGIN:
                 LoginMessageBody loginBody = gson.fromJson(message.getBody(), LoginMessageBody.class);
@@ -82,12 +78,7 @@ public class WebsocketEndpoint implements Sender {
             case LOGIN_SUCCESS:
                 LoginSuccessMessageBody loginSuccessBody = gson.fromJson(message.getBody(), LoginSuccessMessageBody.class);
            
-                try {
-
-                    //////////////////////
-                    System.out.print("Message Received: Login Success");
-                    ///////////////////////
-                    
+                try {                    
                     send(new Message(loginSuccessBody, MessageType.LOGIN_SUCCESS));
                 } catch (IOException e) {
                     System.out.println("LOGIN SUCCESS");
@@ -180,15 +171,7 @@ public class WebsocketEndpoint implements Sender {
                 handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
                 break;  
             case REQUESTED_PLAYER:
-
-                System.out.println();
-                System.out.println("Message Received: REQUESTED_PLAYER");
                 RequestedPlayerMessageBody requestedPlayerBody = gson.fromJson(message.getBody(), RequestedPlayerMessageBody.class);
-
-                System.out.println("Player name: " + requestedPlayerBody.getPlayer().getName());
-                System.out.println("Player id: " + requestedPlayerBody.getPlayer().getUuid());
-                System.out.println();
-                System.out.println();
 
                 try {
                    send(new Message(requestedPlayerBody.getPlayer(), MessageType.REQUESTED_PLAYER));
@@ -196,7 +179,6 @@ public class WebsocketEndpoint implements Sender {
                     System.out.println("PLAYER PROPERTIES");
                     e.printStackTrace();
                 }
-               
                 break;  
             default:
                 break;
