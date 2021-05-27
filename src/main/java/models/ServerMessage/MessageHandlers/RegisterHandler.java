@@ -36,8 +36,9 @@ public class RegisterHandler implements Runnable {
                 player.setName(userName);
                 PlayerDatabaseInterface.getInstance().setPlayer(player);
 
-                if(PlayerDatabaseInterface.getInstance().setPassword(userName, password, player.getUuid())){
+                if(PlayerDatabaseInterface.getInstance().validatePassword(userName, password)){
                     System.out.println("Password Set");
+                    PlayerDatabaseInterface.getInstance().setPassword(userName, password, player.getUuid());
                     
                     String jwt = JWTService.create(player);
                     UUID refreshToken = UUID.randomUUID(); //change this maybe
