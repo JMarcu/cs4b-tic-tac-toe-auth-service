@@ -115,7 +115,7 @@ public class PlayerDatabaseInterface {
                 System.out.print("Error in PlayerDatabaseInterface :: " + ex.getMessage());
             }
        
-
+            System.out.println("isSet: " + isSet);
         return isSet;
     }
 
