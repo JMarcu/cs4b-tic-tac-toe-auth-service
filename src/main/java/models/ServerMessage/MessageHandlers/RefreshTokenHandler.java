@@ -26,7 +26,7 @@ public class RefreshTokenHandler implements Runnable{
         
         String reFreshToken = PlayerDatabaseInterface.getInstance().getRefreshToken(playerId);
         
-        reFreshToken =jwt;
+        //reFreshToken =jwt;
 
         if(JWTService.validate(reFreshToken)){
             // try {
