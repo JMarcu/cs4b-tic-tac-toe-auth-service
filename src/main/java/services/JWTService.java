@@ -6,6 +6,12 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import models.Player;
+
+import java.lang.reflect.Modifier;
 import java.util.Calendar;
 
 /** 
@@ -23,7 +29,7 @@ public class JWTService {
     private static final String ISSUER = "auth0";
 
     /** How many minutes tokens are valid for before they expire. */
-    private static final int MINUTES_TO_EXPIRATION = 5;
+    private static final int MINUTES_TO_EXPIRATION = 60;
 
     /** Name of the environment variable used to inject the secret used in HMAC algorithms. */
     private static final String SECRET_ENV_VAR = "SECRET";
@@ -47,11 +53,16 @@ public class JWTService {
      * @throws JWTCreationException Thrown if a Claim couldn't be converted to JSON or the secret 
      * used in the signing process was invalid
      */
-    public static String create() throws JWTCreationException {
+    public static String create(Player player) throws JWTCreationException {
         Calendar expiration = Calendar.getInstance();
         expiration.add(Calendar.MINUTE, MINUTES_TO_EXPIRATION);
 
+        Gson gson = new GsonBuilder()
+            .excludeFieldsWithModifiers(Modifier.TRANSIENT)
+            .create();
+
         return JWT.create()
+            .withClaim("player", gson.toJson(player, Player.class))
             .withIssuer(ISSUER)
             .withExpiresAt(expiration.getTime())
             .sign(ALGORITHM);

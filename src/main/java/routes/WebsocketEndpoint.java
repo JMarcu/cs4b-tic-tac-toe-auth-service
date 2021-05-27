@@ -28,6 +28,7 @@ import models.ServerMessage.RegisterMessageBody;
 import models.ServerMessage.RegistrationResultMessageBody;
 import models.ServerMessage.RegistrationResultType;
 import models.ServerMessage.RequestPlayerMessageBody;
+import models.ServerMessage.RequestedPlayerMessageBody;
 import models.ServerMessage.MessageHandlers.AuthenticationRequestHandler;
 import models.ServerMessage.MessageHandlers.AuthenticationResultHandler;
 import models.ServerMessage.MessageHandlers.LoginHandler;
@@ -57,6 +58,7 @@ public class WebsocketEndpoint implements Sender {
 
         Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
         Message message = gson.fromJson(messageString, Message.class);
+
         switch(message.getType()){
             case LOGIN:
                 LoginMessageBody loginBody = gson.fromJson(message.getBody(), LoginMessageBody.class);
@@ -76,7 +78,7 @@ public class WebsocketEndpoint implements Sender {
             case LOGIN_SUCCESS:
                 LoginSuccessMessageBody loginSuccessBody = gson.fromJson(message.getBody(), LoginSuccessMessageBody.class);
            
-                try {
+                try {                    
                     send(new Message(loginSuccessBody, MessageType.LOGIN_SUCCESS));
                 } catch (IOException e) {
                     System.out.println("LOGIN SUCCESS");
@@ -88,32 +90,15 @@ public class WebsocketEndpoint implements Sender {
            
                 handler = new LogoutHandler(logoutBody.getPlayerId(), logoutBody.getRefreshToken(), this);
                 break;
-            case LOGOUT_FAIL:
-                try {
-                    send(new Message(null, MessageType.LOGIN_FAIL));
-                } catch (IOException e) {
-                    System.out.println("LOGOUT_FAIL");
-                    e.printStackTrace();
-                }
-                break;
-            case LOGOUT_SUCCESS:
-                try {
-                    send(new Message(null, MessageType.LOGIN_SUCCESS));
-                } catch (IOException e) {
-                    System.out.println("LOGOUT_SUCCESS");
-                    e.printStackTrace();
-                }
-              
-                break;
             case PLAYER_PROPERTIES:
-                PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
+               // PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
 
-                try {
-                    send(new Message(playerPropertiesBody, MessageType.PLAYER_PROPERTIES));
-                } catch (IOException e) {
-                    System.out.println("PLAYER PROPERTIES");
-                    e.printStackTrace();
-                }
+                // try {
+                //    send(new Message(, MessageType.PLAYER_PROPERTIES));
+                // } catch (IOException e) {
+                //     System.out.println("PLAYER PROPERTIES");
+                //     e.printStackTrace();
+                // }
                 break;
             case REGISTER:
                 System.out.println("Register Message Received: " + message.getBody());
@@ -168,6 +153,16 @@ public class WebsocketEndpoint implements Sender {
 
                 handler = new RequestPlayerHandler(requestPlayerBody.getPlayerId(), this);
                 break;  
+            case REQUESTED_PLAYER:
+                RequestedPlayerMessageBody requestedPlayerBody = gson.fromJson(message.getBody(), RequestedPlayerMessageBody.class);
+
+                try {
+                   send(new Message(requestedPlayerBody.getPlayer(), MessageType.REQUESTED_PLAYER));
+                } catch (IOException e) {
+                    System.out.println("PLAYER PROPERTIES");
+                    e.printStackTrace();
+                }
+                break;  
             default:
                 break;
         }
@@ -176,6 +171,7 @@ public class WebsocketEndpoint implements Sender {
 
     public void send(Message message) throws IOException{
         Gson gson = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
+        System.out.println("gson.toJson(message): " + gson.toJson(message));
         session.getBasicRemote().sendText(gson.toJson(message));
     }
 }
