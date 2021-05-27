@@ -29,32 +29,25 @@ public class RegisterHandler implements Runnable {
     public void run() {
         System.out.println("Running Register MessageHandler.");
         try {
-            if(PlayerDatabaseInterface.getInstance().userNameIsUnique(userName)){
-                System.out.println("Name is Unique");
+            Player player = new Player();
+            player.setName(userName);
+            PlayerDatabaseInterface.getInstance().setPlayer(player);
 
-                Player player = new Player();
-                player.setName(userName);
-                PlayerDatabaseInterface.getInstance().setPlayer(player);
+            if(PlayerDatabaseInterface.getInstance().setPassword(userName, password, player.getUuid())){
+                System.out.println("Password Set");
+                
+                String jwt = JWTService.create(player);
+                UUID refreshToken = UUID.randomUUID(); //change this maybe
 
-                if(PlayerDatabaseInterface.getInstance().validatePassword(userName, password)){
-                    System.out.println("Password Set");
-                    PlayerDatabaseInterface.getInstance().setPassword(userName, password, player.getUuid());
-                    
-                    String jwt = JWTService.create(player);
-                    UUID refreshToken = UUID.randomUUID(); //change this maybe
+                PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
-                    PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
-
-                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS, player);
-                    sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 
-                } else{
-                    RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.PASSWORD_FAILS_REQUIREMENTS);
-                    sender.send(new Message(body, MessageType.REGISTRATION_RESULT)); 
-                }
-            } else{
+                RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS, player);
+                sender.send(new Message(body, MessageType.REGISTRATION_RESULT));   
+            }
+            else{
                 RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.USERNAME_ALREADY_EXISTS);
                 sender.send(new Message(body, MessageType.REGISTRATION_RESULT));
-            }     
+            } 
         } catch (IOException e) {
             e.printStackTrace();
 
