@@ -93,7 +93,7 @@ public class WebsocketEndpoint implements Sender {
                 handler = new LogoutHandler(logoutBody.getPlayerId(), logoutBody.getRefreshToken(), this);
                 break;
             case PLAYER_PROPERTIES:
-               // PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
+                // PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
 
                 // try {
                 //    send(new Message(, MessageType.PLAYER_PROPERTIES));
