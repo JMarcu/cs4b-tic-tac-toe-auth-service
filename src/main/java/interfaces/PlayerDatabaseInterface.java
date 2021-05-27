@@ -261,13 +261,14 @@ public class PlayerDatabaseInterface {
         //TODO
         try{
             Connection conn = getConn();
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Players(playerId, markerShape, markerColor, username) VALUES (?,?,?,?) ON CONFLICT (playerId) DO UPDATE SET markerShape = ?, markerColor = ?");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Players(playerId, markerShape, markerColor, username) VALUES (?,?,?,?) ON CONFLICT (playerId) DO UPDATE SET markerShape = ?, markerColor = ?, username = ?");
             stmt.setString(1, player.getUuid().toString());
             stmt.setString(2, player.getShape().toString());
             stmt.setString(3, player.getColor().toString());
             stmt.setString(4, player.getName());
             stmt.setString(5, player.getShape().toString());
             stmt.setString(6, player.getColor().toString());
+            stmt.setString(7, player.getName());
             stmt.executeUpdate();
             //close everything
             stmt.close();
@@ -276,7 +277,7 @@ public class PlayerDatabaseInterface {
             }
             catch(Exception ex)
             {
-                System.out.print("Error in PlayerDatabaseInterface");
+                System.out.println("Error in PlayerDatabaseInterface :: " + ex.getMessage());
             }
     }
 

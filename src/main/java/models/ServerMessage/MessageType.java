@@ -25,5 +25,7 @@ public enum MessageType {
     REGISTER,
     REQUEST_PLAYER,
     REQUESTED_PLAYER,
-    UNKNOWN
+    UNKNOWN,
+    UPDATE_PLAYER,
+    UPDATE_PLAYER_SUCCESS
 }
