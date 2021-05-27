@@ -90,23 +90,6 @@ public class WebsocketEndpoint implements Sender {
            
                 handler = new LogoutHandler(logoutBody.getPlayerId(), logoutBody.getRefreshToken(), this);
                 break;
-            case LOGOUT_FAIL:
-                try {
-                    send(new Message(null, MessageType.LOGIN_FAIL));
-                } catch (IOException e) {
-                    System.out.println("LOGOUT_FAIL");
-                    e.printStackTrace();
-                }
-                break;
-            case LOGOUT_SUCCESS:
-                try {
-                    send(new Message(null, MessageType.LOGIN_SUCCESS));
-                } catch (IOException e) {
-                    System.out.println("LOGOUT_SUCCESS");
-                    e.printStackTrace();
-                }
-              
-                break;
             case PLAYER_PROPERTIES:
                // PlayerPropertiesMessageBody playerPropertiesBody = gson.fromJson(message.getBody(), PlayerPropertiesMessageBody.class);
 
