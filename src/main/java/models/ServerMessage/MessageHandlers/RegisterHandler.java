@@ -41,7 +41,7 @@ public class RegisterHandler implements Runnable {
 
                 PlayerDatabaseInterface.getInstance().setRefreshToken(player.getUuid(), refreshToken.toString());
 
-                RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS, player, jwt, refreshToken);
+                RegistrationResultMessageBody body = new RegistrationResultMessageBody(RegistrationResultType.SUCCESS, player, jwt, refreshToken.toString());
                 sender.send(new Message(body, MessageType.REGISTRATION_RESULT));   
             }
             else{
