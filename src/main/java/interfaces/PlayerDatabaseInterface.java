@@ -268,7 +268,7 @@ public class PlayerDatabaseInterface {
             stmt.setString(4, player.getName());
             stmt.setString(5, player.getShape().toString());
             stmt.setString(6, player.getColor().toString());
-            stmt.setString(6, player.getName());
+            stmt.setString(7, player.getName());
             stmt.executeUpdate();
             //close everything
             stmt.close();
@@ -277,7 +277,7 @@ public class PlayerDatabaseInterface {
             }
             catch(Exception ex)
             {
-                System.out.print("Error in PlayerDatabaseInterface :: " + ex.getMessage());
+                System.out.println("Error in PlayerDatabaseInterface :: " + ex.getMessage());
             }
     }
 
