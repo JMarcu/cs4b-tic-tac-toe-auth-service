@@ -29,6 +29,7 @@ import models.ServerMessage.RegistrationResultMessageBody;
 import models.ServerMessage.RegistrationResultType;
 import models.ServerMessage.RequestPlayerMessageBody;
 import models.ServerMessage.RequestedPlayerMessageBody;
+import models.ServerMessage.UpdatePlayerMessageBody;
 import models.ServerMessage.MessageHandlers.AuthenticationRequestHandler;
 import models.ServerMessage.MessageHandlers.AuthenticationResultHandler;
 import models.ServerMessage.MessageHandlers.LoginHandler;
@@ -36,6 +37,7 @@ import models.ServerMessage.MessageHandlers.LogoutHandler;
 import models.ServerMessage.MessageHandlers.RefreshTokenHandler;
 import models.ServerMessage.MessageHandlers.RegisterHandler;
 import models.ServerMessage.MessageHandlers.RequestPlayerHandler;
+import models.ServerMessage.MessageHandlers.UpdatePlayerHandler;
 
 @ServerEndpoint(value = "/ws")
 public class WebsocketEndpoint implements Sender {
@@ -162,7 +164,11 @@ public class WebsocketEndpoint implements Sender {
                     System.out.println("PLAYER PROPERTIES");
                     e.printStackTrace();
                 }
-                break;  
+                break; 
+            case UPDATE_PLAYER:
+                UpdatePlayerMessageBody updatePlayerBody = gson.fromJson(message.getBody(), UpdatePlayerMessageBody.class);
+                handler = new UpdatePlayerHandler(updatePlayerBody, this);
+                break;
             default:
                 break;
         }
